@@ -1,0 +1,4 @@
+<Files "CHAT">
+Order Allow,Deny
+Deny from all
+</Files>
