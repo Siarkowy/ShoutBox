@@ -4,7 +4,7 @@ define('CHAT_FILE', 'CHAT');
 
 if (isset($_POST['msg']) && !empty($_POST['msg']))
 {
-    if ($_POST['msg'] == 'clear')
+    if ($_POST['msg'] == '/clear')
         $file = fopen(CHAT_FILE, 'w');
     else
     {
