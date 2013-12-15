@@ -1,34 +1,59 @@
+<?php
+
+define('CHAT_FILE', 'CHAT');
+
+if (isset($_POST['msg']) && !empty($_POST['msg']))
+{
+    if ($_POST['msg'] == 'clear')
+        $file = fopen(CHAT_FILE, 'w');
+    else
+    {
+        $file = fopen(CHAT_FILE, 'a');
+        fputs($file, time() . ' ' . htmlspecialchars($_POST['msg']) . PHP_EOL);
+        header('Location: .');
+        die;
+    }
+
+    fclose($file);
+}
+
+$file = fopen(CHAT_FILE, 'r');
+
+?>
+<!DOCTYPE html>
 <html>
 
 <head>
-<meta http-equiv="Refresh" content="20">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>ShoutBox</title>
+    <meta http-equiv="Refresh" content="20">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./bootstrap3/css/bootstrap.min.css">
 </head>
 
 <body>
-<center>
+    <div class="container">
+        <h1>ShoutBox</h1>
 
-<table width=60% border=1>
-<tr><td align=left><h1>GG</h1></td></tr>
-<tr><td>
+        <table class="table">
+<?php while ($line = fgets($file)): list($time, $msg) = explode(' ', $line, 2) ?>
+            <tr><td><span class="text-muted"><?= date('H:i', $time) ?></span> <?= trim($msg) ?></td></tr>
+<?php endwhile ?>
+        </table>
 
-<?php
- $tekst = implode("</tr></td><tr><td>", file("gg.txt"));
- echo $tekst;
-?>
+        <form action="?" method="post" class="form-inline" role="form">
+            <div class="form-group">
+                <input type="text" id="msg" name="msg" accesskey="s"
+                    placeholder="message" size="80" class="form-control">
+            </div>
 
-</td></tr>
-</table>
+            <button type="submit" class="btn btn-primary">send</button>
+        </form>
+    </div>
 
-<br>
-
-<form action=dopisz.php method=post>
-
- <input type=text name=dopisz size=80><br>
- <input type=checkbox name=czysc value=czysc>CLEAR<br>
- <input type=submit value=______SEND______>
-</form>
-
-</center>
+    <script type="text/javascript">
+        document.getElementById('msg').focus();
+    </script>
 </body>
 
 </html>
